@@ -149,6 +149,11 @@
             transition: top 0.3s ease; /* Smooth transition for responsiveness */
         }
 
+        /* New class to hide elements on mobile */
+        .desktop-only {
+            display: block; /* Default to block for desktop */
+        }
+
         .social-media {
             display: flex;
             flex-direction: row; /* Changed to row for landscape layout */
@@ -358,6 +363,11 @@
                 max-width: 350px; /* Keep a max width */
             }
 
+            /* Hide .desktop-only elements on screens up to 768px wide */
+            .desktop-only {
+                display: none;
+            }
+
             .live-badge {
                 position: static; /* Change to static for flow in mobile layout */
                 margin-bottom: 15px; /* Add space below LIVE badge when stacked */
@@ -437,7 +447,8 @@
     <header>
         <div class="header-search-input-group">
             <input type="text" placeholder="Search your keywords" id="page-search-input">
-            <button id="page-search-button"><i class="fas fa-search"></i></button> </div>
+            <button id="page-search-button"><i class="fas fa-search"></i></button>
+        </div>
         <nav>
             <ul>
                 <li><a href="#">Home</a></li>
@@ -479,10 +490,11 @@
         <div class=""><a href="#"></a></div>
     </header>
 
-    <div class="live-badge">LIVE</div>
+    <div class="desktop-only">
+        <div class="live-badge">LIVE</div>
+        <div id="digital-clock"></div>
+    </div>
     
-    <div id="digital-clock"></div>
-
     <div class="hero">
         <h1>BAPON BARMON</h1>
         <div class="search-bar">
@@ -652,7 +664,7 @@
                 const messageBox = document.createElement('div');
                 messageBox.className = 'custom-prompt';
                 messageBox.innerHTML = `
-                    <p>कृपया खोजने के लिए टेक्स्ट दर्ज करें।</p>
+                    <p>Please enter text to search.</p>
                     <button id="message-box-ok">OK</button>
                 `;
                 document.body.appendChild(messageBox);
@@ -677,7 +689,7 @@
                 const messageBox = document.createElement('div');
                 messageBox.className = 'custom-prompt';
                 messageBox.innerHTML = `
-                    <p>इस पृष्ठ पर "${query}" के कोई और उदाहरण नहीं मिले।</p>
+                    <p>No more instances of "${query}" found on this page.</p>
                     <button id="message-box-ok">OK</button>
                 `;
                 document.body.appendChild(messageBox);
