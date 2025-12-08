@@ -409,13 +409,17 @@ window.addEventListener('DOMContentLoaded',()=>{
 <!-- Navbar -->
 <div class="navbar">
   <div class="logo">BAPON BARMON</div>
-  <!-- ⬇️ yahan event pass kiya hai -->
   <div class="hamburger" onclick="toggleMenu(event)">☰</div>
 </div>
 
 <!-- Hamburger Menu -->
-<!-- ⬇️ menu div pe click ko stopPropagation JS se handle kiya hai -->
 <div class="menu" id="menu">
+  <!-- 1️⃣ PROFILE sabse upar -->
+  <a class="menu-item" href="https://baponbarmon.github.io/Profile-/" style="justify-content">
+    Profile
+  </a>
+
+  <!-- 2️⃣ TOOLS -->
   <div class="menu-item" onclick="toggleSubmenu('toolsSub', event)">Tools</div>
   <div class="submenu" id="toolsSub">
     <a href="https://baponbarmon.github.io/Image-converter/">Image Converter</a>
@@ -430,6 +434,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     <a href="https://baponbarmon.github.io/Link-Modifier/">Drive Link Modifier</a>
   </div>
 
+  <!-- 3️⃣ TOOLS 2.0 -->
   <div class="menu-item" onclick="toggleSubmenu('tools2Sub', event)">Tools 2.0</div>
   <div class="submenu" id="tools2Sub">
     <a href="https://baponbarmon.github.io/age-calculator/">Age Calculator</a>
@@ -463,9 +468,17 @@ window.addEventListener('DOMContentLoaded',()=>{
 </div>
 
 <!-- Popups -->
-<div class="popup" id="accessDeniedPopup"><div class="popup-content"><p>❌ Access Denied</p></div></div>
-<div class="popup" id="accessGrantedPopup"><div class="popup-content"><p>✅ Access Granted</p></div></div>
-<div class="popup" id="logoutPopup"><div class="popup-content"><p>🔒 Logout Successfully</p></div></div>
+<div class="popup" id="accessDeniedPopup">
+  <div class="popup-content"><p>❌ Access Denied</p></div>
+</div>
+
+<div class="popup" id="accessGrantedPopup">
+  <div class="popup-content"><p>✅ Access Granted</p></div>
+</div>
+
+<div class="popup" id="logoutPopup">
+  <div class="popup-content"><p>🔒 Logout Successfully</p></div>
+</div>
 
 <!-- Welcome Popup -->
 <div class="popup" id="welcomePopup">
@@ -482,7 +495,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   </div>
 </div>
 
-<!-- Other Info Popups (About, Contact, etc.) -->
+<!-- About Popup -->
 <div class="popup" id="aboutPopup">
   <div class="popup-content">
     <button class="close-popup" onclick="closePopup('aboutPopup')">Close</button>
@@ -500,6 +513,7 @@ The main vision of this project is to deliver **secure, fast, and reliable onlin
   </div>
 </div>
 
+<!-- Contact Popup -->
 <div class="popup" id="contactPopup">
   <div class="popup-content">
     <button class="close-popup" onclick="closePopup('contactPopup')">Close</button>
@@ -509,6 +523,7 @@ The main vision of this project is to deliver **secure, fast, and reliable onlin
   </div>
 </div>
 
+<!-- Privacy Popup -->
 <div class="popup" id="privacyPopup">
   <div class="popup-content">
     <button class="close-popup" onclick="closePopup('privacyPopup')">Close</button>
@@ -520,12 +535,11 @@ Any email addresses or information you share will only be used to deliver update
 
 Our website may include links to third-party services or tools. Please note that we are not responsible for the privacy practices of those external websites.
 
-By using **BAPON BARMON UI**, you agree to this Privacy Policy. We encourage users to check this section regularly, as updates may be made to improve transparency and protection.
-
----</p>
+By using **BAPON BARMON UI**, you agree to this Privacy Policy. We encourage users to check this section regularly, as updates may be made to improve transparency and protection.</p>
   </div>
 </div>
 
+<!-- Terms Popup -->
 <div class="popup" id="termsPopup">
   <div class="popup-content">
     <button class="close-popup" onclick="closePopup('termsPopup')">Close</button>
@@ -541,6 +555,7 @@ We may update or modify these terms at any time without prior notice. Continued 
   </div>
 </div>
 
+<!-- Sitemap Popup -->
 <div class="popup" id="sitemapPopup">
   <div class="popup-content">
     <button class="close-popup" onclick="closePopup('sitemapPopup')">Close</button>
@@ -548,59 +563,44 @@ We may update or modify these terms at any time without prior notice. Continued 
 
 **Main Sections**
 
-* **Home** – Homepage and quick access panel
-* **Login Panel** – Secure login for users
-* **Icon Bar Navigation**
+* Home – Homepage and quick access panel  
+* Login Panel – Secure login for users  
+* Icon Bar Navigation – Home, SMS Service, File Sharing, Code Runner, Code Saver, Device Connector, Contact  
 
-  * Home
-  * SMS Service
-  * File Sharing
-  * Code Runner
-  * Code Saver
-  * Device Connector
-  * Contact
+**Tools Menu**
 
-**Tools**
+* Image Converter  
+* Image Compressor  
+* Image to PDF  
+* Bio Data Maker  
+* ID Card Maker  
+* ID Card Maker 2.0  
+* PDF Editor  
+* Passport Photo Maker  
+* Drive Link Modifier  
 
-* **Tools Menu**
+**Tools 2.0 Menu**
 
-  * Image Converter
-  * Image Compressor
-  * Image to PDF
-  * Bio Data Maker
-  * ID Card Maker
-  * ID Card Maker 2.0
-  * PDF Editor
-  * Passport Photo Maker
-  * Drive Link Modifier
+* Age Calculator  
+* Time Calculator  
+* PDF Password Remover  
+* Photo Joiner  
+* Cloud Notepad  
+* Cloud Aadhaar ID Card  
 
-* **Tools 2.0 Menu**
+**Information Popups**
 
-  * Age Calculator
-  * Time Calculator
-  * PDF Password Remover
-  * Photo Joiner
-  * Cloud Notepad
-  * Cloud Aadhaar ID Card
+* About  
+* Contact  
+* Privacy Policy  
+* Terms of Service  
+* Site Map  
 
-**Information Pages (Popups)**
-
-* About
-* Contact
-* Privacy Policy
-* Terms of Service
-* Site Map
-
-**Footer**
-
-* Social Media Links (Facebook, Twitter, Instagram, YouTube, LinkedIn)
-* Newsletter Subscription
-* Copyright © 2025 BAPON BARMON
-
-</p>
+Footer contains social media links, newsletter and copyright.</p>
   </div>
 </div>
 
+<!-- Invalid Email Popup -->
 <div class="popup" id="invalidEmailPopup">
   <div class="popup-content">
     <button class="close-popup" onclick="closePopup('invalidEmailPopup')">Close</button>
@@ -608,6 +608,7 @@ We may update or modify these terms at any time without prior notice. Continued 
   </div>
 </div>
 
+<!-- Thank You Popup -->
 <div class="popup" id="thankYouPopup">
   <div class="popup-content">
     <button class="close-popup" onclick="closePopup('thankYouPopup')">Close</button>
@@ -625,6 +626,7 @@ We may update or modify these terms at any time without prior notice. Continued 
       <a href="#"><i class="fab fa-youtube"></i></a>
       <a href="#"><i class="fab fa-linkedin-in"></i></a>
     </div>
+
     <div class="footer-links">
       <a href="javascript:void(0)" onclick="openPopup('aboutPopup')">About</a>
       <a href="javascript:void(0)" onclick="openPopup('contactPopup')">Contact</a>
@@ -632,14 +634,13 @@ We may update or modify these terms at any time without prior notice. Continued 
       <a href="javascript:void(0)" onclick="openPopup('termsPopup')">Terms of Service</a>
       <a href="javascript:void(0)" onclick="openPopup('sitemapPopup')">Site Map</a>
     </div>
+
     <div class="footer-newsletter">
+      <p>Subscribe to our newsletter</p>
       <input type="email" id="newsletterEmail" placeholder="Enter your email">
       <button onclick="subscribeEmail()">Subscribe</button>
     </div>
   </div>
-  <div class="footer-bottom">&copy; 2025 BAPON BARMON | All Rights Reserved</div>
-</div>
 
-</body>
-</html>
-
+  <div class="footer-bottom">
+    © 2025 BAPON BARMON. All rights reserve
