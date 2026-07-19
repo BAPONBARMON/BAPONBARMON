@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAPON BARMON</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* --- Cyber Neon Theme Base --- */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:monospace; background:black; color:#00ff00; min-height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+
+/* Matrix Scanline Effect */
+body::before {
+  content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: repeating-linear-gradient(0deg, rgba(0, 255, 0, 0.01) 0px, rgba(0, 255, 0, 0.01) 1px, transparent 1px, transparent 15px);
+  pointer-events: none; z-index: 10;
+}
+
+/* Top Navigation Tabs - BOX DESIGN & ALIGNED */
+.headline-tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  border-bottom: 2px solid #00ff00;
+  padding: 15px 10px;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+}
+.tab-btn {
+  background: rgba(0, 15, 0, 0.4);
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  color: #00ff00;
+  padding: 8px 0;
+  width: 140px; 
+  text-align: center;
+  font-family: monospace;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-weight: bold;
+  border-radius: 4px;
+  display: inline-block;
+}
+.tab-btn a { color: #00ff00; text-decoration: none; display: block; width: 100%; height: 100%; }
+.tab-btn:hover, .tab-btn.active {
+  color: #fff;
+  border-color: #00ff00;
+  background: #002200;
+  box-shadow: 0 0 12px rgba(0, 255, 0, 0.6);
+}
+.tab-btn:hover a { color: #fff; }
+
+/* Main Workspace Grid Configuration */
+.main-container {
+  display: flex;
+  flex: 1;
+  padding: 20px;
+  gap: 25px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Workspace: Micro Tiles Grid (Fully Isolated Categories) */
+.tools-section {
+  display: none; 
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  align-content: flex-start;
+  width: 100%;
+}
+/* Handled explicitly via JS active-section token */
+.tools-section.active-section { display: grid !important; }
+
+.tool-tile {
+  background: rgba(5, 15, 5, 0.95);
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  padding: 12px 8px;
+  border-radius: 6px;
+  text-align: center;
+  text-decoration: none;
+  color: #00ff00;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.tool-tile::before {
+  content: "SYS.EXE"; position: absolute; top: 3px; left: 6px; font-size: 0.5rem; color: rgba(0,255,0,0.4);
+}
+.tool-tile:hover {
+  transform: scale(1.04);
+  border-color: #00ff00;
+  box-shadow: 0 0 12px rgba(0, 255, 0, 0.5);
+  background: rgba(0, 25, 0, 0.08);
+}
+.tool-tile i { font-size: 1.6rem; margin-bottom: 6px; display: block; color: #00ff00; text-shadow: 0 0 5px rgba(0,255,0,0.5); }
+.tool-tile h3 { font-size: 0.75rem; color: #fff; line-height: 1.2; font-weight: 500; }
+
+/* --- Compact Slim Rounded-Corner Login Panel --- */
+.login-panel {
+  width: 100%;
+  max-width: 350px; 
+  height: 330px; 
+  background: rgba(0, 5, 0, 0.9);
+  border: 2px solid rgba(0, 255, 0, 0.5);
+  padding: 25px 20px;
+  border-radius: 12px; 
+  box-shadow: 0 0 25px rgba(0, 255, 0, 0.15);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.login-panel:hover { border-color: #00ff00; box-shadow: 0 0 30px rgba(0, 255, 0, 0.3); }
+
+/* Toggle Visibility States via Container Class Token */
+.main-container.hide-login .login-panel, 
+.main-container.hide-login .sys-widget-panel { display: none !important; }
+
+.login-panel h3 { 
+  margin-bottom: 20px; font-size: 18px; font-weight: bold;
+  letter-spacing: 2px; text-shadow: 0 0 8px #00ff00; 
+  text-transform: uppercase; text-align: center; color: #fff;
+}
+.input-wrapper { position: relative; margin-bottom: 12px; width: 100%; }
+.input-wrapper i { position: absolute; top: 12px; left: 15px; color: rgba(0, 255, 0, 0.6); font-size: 14px; }
+.login-panel input {
+  width: 100%; padding: 10px 15px 10px 45px; border: 1px solid rgba(0, 255, 0, 0.4); 
+  background: rgba(0, 0, 0, 0.7); color: #00ff00; border-radius: 6px; 
+  font-family: monospace; font-size: 13px; outline: none;
+}
+.login-panel input:focus { border-color: #00ff00; box-shadow: 0 0 8px rgba(0, 255, 0, 0.3); }
+.login-panel button {
+  width: 100%; background: rgba(0, 20, 0, 0.6); border: 2px solid rgba(0, 255, 0, 0.5); 
+  color: #00ff00; padding: 10px; cursor: pointer; border-radius: 6px; margin-top: 8px; 
+  font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;
+}
+.login-panel button:hover { background: #00ff00; color: #000; box-shadow: 0 0 15px #00ff00; }
+
+/* --- Compact System Info Diagnostics Widget --- */
+.sys-widget-panel {
+  display: none;
+  width: 100%;
+  max-width: 350px; 
+  height: 330px; 
+  background: rgba(0, 5, 0, 0.9);
+  border: 2px solid rgba(0, 255, 0, 0.5);
+  padding: 20px;
+  border-radius: 12px; 
+  box-shadow: 0 0 25px rgba(0, 255, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.sys-widget-panel:hover { border-color: #00ff00; box-shadow: 0 0 30px rgba(0, 255, 0, 0.3); }
+
+.widget-title {
+  font-size: 13px; font-weight: bold; color: #fff; text-shadow: 0 0 5px #00ff00;
+  text-transform: uppercase; margin-bottom: 5px; text-align: center; letter-spacing: 1.5px;
+}
+
+/* Big Stylish Normal Clock Display (No Glowing Glow Effects) */
+.cyber-clock-box {
+  text-align: center;
+  background: rgba(0, 20, 0, 0.4);
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 0, 0.2);
+  margin-bottom: 5px;
+}
+#cyberTime {
+  font-size: 26px; 
+  font-weight: 900;
+  color: #ffffff; 
+  text-shadow: none; 
+  font-family: monospace;
+  letter-spacing: 1px;
+}
+#cyberDate { font-size: 11px; color: #00ff00; margin-top: 2px; letter-spacing: 1px; }
+
+.stat-line { margin-bottom: 6px; font-size: 11px; color: #00ff00; }
+.stat-line span { color: #fff; font-weight: bold; }
+
+/* --- Smooth Slow-Moving Detailed Heartbeat Pulse Wave Graph --- */
+.heartbeat-container {
+  width: 100%;
+  height: 55px;
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  background: #000;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 2px;
+}
+.heartbeat-svg { width: 100%; height: 100%; }
+.pulse-line {
+  stroke: #00ff00;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: slowHeartbeat 6s linear infinite; 
+  filter: drop-shadow(0px 0px 4px #00ff00);
+}
+@keyframes slowHeartbeat { to { stroke-dashoffset: 0; } }
+
+/* --- Cyber Hacking Spinner Screen --- */
+.hacker-loading-screen {
+  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;
+}
+.cyber-spinner {
+  width: 70px; height: 70px; border: 3px solid transparent; border-top: 3px solid #00ff00; border-bottom: 3px solid #00ff00;
+  border-radius: 50%; animation: cyberSpin 1s linear infinite; box-shadow: 0 0 15px #00ff00; position: relative;
+}
+.cyber-spinner::after {
+  content: ""; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+  border: 2px solid transparent; border-left: 2px solid #00ff00; border-right: 2px solid #00ff00;
+  border-radius: 50%; animation: cyberSpinReverse 1.5s linear infinite;
+}
+.loading-text {
+  margin-top: 20px; color: #00ff00; font-family: monospace; font-size: 13px;
+  letter-spacing: 4px; font-weight: bold; animation: pulseText 0.8s infinite alternate;
+}
+@keyframes cyberSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes cyberSpinReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+@keyframes pulseText { 0% { opacity: 0.4; } 100% { opacity: 1; } }
+
+/* Popups Framework */
+.popup {
+  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.9); color:#00ff00; z-index:2000; justify-content:center; align-items:center;
+}
+.popup-content { background:#000; border:2px solid #00ff00; padding:20px; width:300px; border-radius:10px; text-align:center; position:relative; }
+.popup-content p { margin-bottom:15px; line-height:1.4; }
+.close-popup { position:absolute; top:5px; right:10px; background:#001100; border:1px solid #00ff00; color:#00ff00; padding:2px 8px; cursor:pointer; border-radius:5px; font-size:12px; }
+.close-popup:hover { background:#00ff00; color:#000; }
+
+/* Footer Engine */
+.page-footer { 
+  background:#020502; border-top:2px solid #00ff00; color:#00ff00; 
+  text-align:center; padding:20px; box-shadow: 0 -5px 15px rgba(0,255,0,0.15);
+  margin-top: auto;
+}
+.footer-social { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; }
+.footer-social a { 
+  color:#00ff00; font-size:18px; text-decoration: none; width: 35px; height: 35px; 
+  border: 1px solid #00ff00; display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; transition: all 0.3s ease; background: rgba(0, 0, 0, 0.6);
+}
+.footer-social a:hover { color: #000; background: #00ff00; box-shadow: 0 0 15px #00ff00; transform: translateY(-3px); }
+
+.footer-links { display:flex; flex-direction:row; justify-content:center; gap: 20px; margin: 10px 0; flex-wrap: wrap; }
+.footer-links a { 
+  color:#00ff00; text-decoration:none; font-size:11px; font-weight: bold;
+  border: 1px solid rgba(0, 255, 0, 0.3); padding: 6px 12px; border-radius: 4px;
+  transition: all 0.3s; letter-spacing: 1.5px; background: rgba(0, 15, 0, 0.4);
+}
+.footer-links a:hover { color: #fff; border-color: #00ff00; background: #002200; box-shadow: 0 0 12px rgba(0, 255, 0, 0.6); }
+.footer-bottom { font-size:11px; margin-top:10px; border-top:1px solid rgba(0,255,0,0.2); padding-top:8px; color: #559955; letter-spacing: 1px; }
+
+/* ========================================================================= */
+/* 💻💻 ULTRA DESKTOP & LAPTOP SOLID OPTIMIZATION ENGINE (ONLY FOR PC/MAC)   */
+/* ========================================================================= */
+@media (min-width: 1024px) {
+  body { font-size: 15px; font-weight: 900; }
+  
+  .headline-tabs { padding: 15px 10px; border-bottom-width: 3px; gap: 15px; }
+  .tab-btn { 
+    width: 150px; font-size: 13px; font-weight: 900; 
+    border: 2px solid #00ff00; background: rgba(0, 25, 0, 0.7); 
+  }
+  .tab-btn:hover, .tab-btn.active { border-color: #fff; background: #003300; box-shadow: 0 0 25px #00ff00; }
+
+  .main-container { gap: 30px; padding: 30px 40px; justify-content: center; }
+
+  /* Right Side Diagnostic Box Shifted to Left Side (Matched Dimensions) */
+  .sys-widget-panel { 
+    display: flex !important; max-width: 370px; height: 340px; padding: 30px 25px;
+    border: 3px solid #00ff00; box-shadow: 0 0 30px rgba(0, 255, 0, 0.4); background: rgba(0, 10, 0, 0.95);
+  }
+
+  /* Left Side Login Panel Shifted to Right Side (Matched Dimensions) */
+  .login-panel { 
+    max-width: 370px; height: 340px; padding: 30px 25px;
+    border: 3px solid #00ff00; box-shadow: 0 0 30px rgba(0, 255, 0, 0.4); background: rgba(0, 10, 0, 0.95);
+  }
+  .login-panel h3 { font-size: 20px; font-weight: 900; letter-spacing: 3px; }
+  .login-panel input { padding: 12px 15px 12px 45px; border: 2px solid #00ff00; font-size: 14px; font-weight: 900; }
+  .login-panel button { padding: 12px; border: 2px solid #00ff00; font-size: 14px; font-weight: 900; letter-spacing: 2px; }
+
+  .tool-tile { border: 2px solid rgba(0, 255, 0, 0.6); padding: 20px 10px; }
+  .tool-tile:hover { border-color: #00ff00; box-shadow: 0 0 25px #00ff00; }
+  .tool-tile i { font-size: 2rem; font-weight: 900; }
+  .tool-tile h3 { font-size: 0.85rem; font-weight: 900; }
+}
+
+/* Mobile Adjustments Frame */
+@media (max-width: 768px) {
+  body { overflow-y: auto; }
+  /* ✅ FIXED FOR MOBILE: Now Core Diagnostics appears first, then Login follows below */
+  .main-container { padding: 15px; width: 100%; gap: 20px; display: flex; flex-direction: column; }
+  .login-panel, .sys-widget-panel { max-width: 100%; width: 100%; height: auto; padding: 30px 20px; border-radius: 12px; }
+  .sys-widget-panel { display: flex !important; } 
+  .tools-section { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
+  .footer-links { flex-direction: column; gap: 10px; align-items: center; }
+  .headline-tabs { gap: 10px; padding: 15px 5px; }
+  .tab-btn { width: 45%; padding: 8px 0; font-size: 11px; }
+}
+</style>
+
+<script>
+function switchTab(evt, tabId) {
+  var container = document.getElementById("mainContainer");
+  var sections = document.getElementsByClassName("tools-section");
+  
+  // Clean sweep hide all sections first
+  for (var i = 0; i < sections.length; i++) {
+      sections[i].classList.remove("active-section");
+  }
+
+  if (tabId === 'home') {
+    container.classList.remove("hide-login");
+  } else {
+    container.classList.add("hide-login");
+    document.getElementById(tabId).classList.add("active-section");
+  }
+
+  var buttons = document.getElementsByClassName("tab-btn");
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].classList.remove("active");
+  }
+  if(evt) evt.currentTarget.classList.add("active");
+}
+
+// 2-Second Cyber Loading Function with SAME PAGE REDIRECTION
+function launchTool(url, e) {
+  if(e) e.preventDefault();
+  var loader = document.getElementById("hackerLoader");
+  loader.style.display = "flex";
+  
+  setTimeout(function() {
+    loader.style.display = "none";
+    window.open(url, '_self'); 
+  }, 2000);
+}
+
+// Live Realtime OS Engine for System Core Widget
+function runCyberClock() {
+  const timeBox = document.getElementById("cyberTime");
+  const dateBox = document.getElementById("cyberDate");
+  const healthBox = document.getElementById("cyberHealthVal");
+  if(!timeBox) return;
+
+  const now = new Date();
+  timeBox.innerText = now.toLocaleTimeString();
+  
+  const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+  dateBox.innerText = now.toLocaleDateString('en-US', options);
+
+  // Live Running Random Performance Engine (95% to 99.9%)
+  const randomHealth = (Math.random() * (99.9 - 95.0) + 95.0).toFixed(1);
+  healthBox.innerText = randomHealth + "%";
+}
+setInterval(runCyberClock, 1000);
+
+function openPopup(id){document.getElementById(id).style.display="flex";}
+function closePopup(id){document.getElementById(id).style.display="none";}
+
+function login(){
+  const user=document.getElementById("username").value.trim();
+  const pass=document.getElementById("password").value.trim();
+  if(user==="BAPON" && pass==="12345"){
+    openPopup("accessGrantedPopup");
+    setTimeout(()=>{ closePopup("accessGrantedPopup"); openPopup("welcomePopup"); },2000);
+  }else{
+    openPopup("accessDeniedPopup"); setTimeout(()=>{closePopup("accessDeniedPopup");},2000);
+  }
+}
+
+function logout(){
+  closePopup("welcomePopup"); openPopup("logoutPopup");
+  setTimeout(()=>{closePopup("logoutPopup");},2000);
+  document.getElementById("username").value=""; document.getElementById("password").value="";
+}
+</script>
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
+<link rel="manifest" href="manifest.json">
+</head>
+<body onload="runCyberClock()">
+
+<!-- High Stylish Dual-Ring Hacker Loading Layer -->
+<div class="hacker-loading-screen" id="hackerLoader">
+    <div class="cyber-spinner"></div>
+    <div class="loading-text">Loading Data, Please Wait.....</div>
+</div>
+
+<!-- Dynamic Navigation Headings - MATCHED BOX DESIGN & EXTRA BOLD -->
+<div class="headline-tabs">
+  <button class="tab-btn active" onclick="switchTab(event, 'home')">Home</button>
+  <button class="tab-btn" onclick="switchTab(event, 'system-core')">System Core</button>
+  <button class="tab-btn" onclick="switchTab(event, 'tools-menu')">Tools</button>
+  <button class="tab-btn" onclick="switchTab(event, 'tools-2')">Tools 2.0</button>
+  <button class="tab-btn" onclick="launchTool('https://baponbarmon126.github.io/B-Drive/', event)">B-Drive</button>
+  <button class="tab-btn" onclick="launchTool('https://baponbarmon.github.io/Profile-/', event)">Profile</button>
+  <button class="tab-btn" onclick="openPopup('contactPopup')">Contact</button>
+</div>
+
+<!-- Main Body Grid Frame -->
+<div class="main-container" id="mainContainer">
+    
+    <!-- 1️⃣ Tab 1: System Core Only -->
+    <div id="system-core" class="tools-section">
+        <a href="https://baponbarmon.github.io/device-connector-frontend/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-comment"></i><h3>Chat</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/File-transfer/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-folder"></i><h3>Files Share</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/code-runner/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-play"></i><h3>Code Runner</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/code-saver/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-save"></i><h3>Code Saver</h3>
+        </a>
+        <a href="https://https://baponbarmon.github.io/Multiple-file-compressor/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-plug"></i><h3>Connect</h3>
+        </a>
+    </div>
+
+    <!-- 2️⃣ Tab 2: Tools (12 Tools Isolated) -->
+    <div id="tools-menu" class="tools-section">
+        <a href="https://baponbarmon.github.io/Image-converter/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-file-image"></i><h3>Image Converter</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/Image-Compressor/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-file-archive"></i><h3>Image Compressor</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/IMAGE-SIZE-INCREASER/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-arrow-up-right-dots"></i><h3>Size Increaser</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/Multiple-file-compressor/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-file-zipper"></i><h3>Multi Compressor</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/Image-to-PDF/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-file-pdf"></i><h3>Image to PDF</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/PDF-Compressor-/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-compress"></i><h3>PDF Compressor</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/PDF-to-IMAGE/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-images"></i><h3>PDF to Image</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/PDF-Locker/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-lock"></i><h3>PDF Locker</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/Biodata-Tools/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-address-card"></i><h3>Bio Data Maker</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/Photo-Joinner/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-layer-group"></i><h3>Photo Joiner</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/make-id-card/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-id-card-clip"></i><h3>ID Card Maker</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/Passport-Size-Photo-Maker/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-user-tie"></i><h3>Passport Photo</h3>
+        </a>
+    </div>
+
+    <!-- 3️⃣ Tab 3: Tools 2.0 (8 Tools Isolated) -->
+    <div id="tools-2" class="tools-section">
+        <a href="https://baponbarmon.github.io/age-calculator/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-calculator"></i><h3>Age Calculator</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/Time-Calculator/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-clock"></i><h3>Time Calculator</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/Cement-Calculator/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-trowel-bricks"></i><h3>Cement Calculator</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/PDF-Passward-Remover/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-unlock"></i><h3>PDF Unlock</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/Link-Modifier/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-link"></i><h3>Drive Link Mod</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/Notepad/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-cloud"></i><h3>Cloud Notepad</h3>
+        </a>
+        <a href="https://baponbarmon126.github.io/Notepad/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-book"></i><h3>Notepad 2.0</h3>
+        </a>
+        <a href="https://baponbarmon.github.io/image-details-extractor/" onclick="launchTool(this.href, event)" class="tool-tile">
+            <i class="fas fa-magnifying-glass"></i><h3>Image Extractor</h3>
+        </a>
+    </div>
+
+    <!-- Right Box: System Info Diagnostics Widget -->
+    <div class="sys-widget-panel" id="sysWidget">
+        <div class="widget-title">>_ SYSTEM CORE DIAGNOSTICS</div>
+        
+        <!-- Big Stylish Normal Clock Display -->
+        <div class="cyber-clock-box">
+            <div id="cyberTime">00:00:00 AM</div>
+            <div id="cyberDate">Sun, Jul 19, 2026</div>
+        </div>
+
+        <div class="stat-line">ENVIRONMENT :: <span id="cyberWeather">CYBER CLOUD SYSTEM // 28°C</span></div>
+        <div class="stat-line">CORE HEALTH :: <span style="color:#fff;">STABLE RUNNING // </span><span id="cyberHealthVal" style="color:#00ff00;">98.4%</span></div>
+        
+        <!-- Realtime Heartbeat High Detailing SVG Graph (Slow Motion Engine) -->
+        <div class="heartbeat-container">
+            <svg class="heartbeat-svg" viewBox="0 0 600 100">
+                <path class="pulse-line" d="M0,50 L100,50 L110,40 L120,60 L130,50 L180,50 L190,45 L200,55 L210,50 L260,50 L270,15 L285,85 L300,40 L310,55 L320,50 L400,50 L410,40 L420,60 L430,50 L500,50 L510,15 L525,85 L540,50 L600,50" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Left Box: Secure Login Panel -->
+    <div class="login-panel" id="loginPanel">
+      <h3>login</h3>
+      <div class="input-wrapper">
+          <i class="fas fa-user"></i>
+          <input type="text" id="username" placeholder="Access ID">
+      </div>
+      <div class="input-wrapper">
+          <i class="fas fa-key"></i>
+          <input type="password" id="password" placeholder="Passkey">
+      </div>
+      <button onclick="login()">Authorize</button>
+    </div>
+
+</div>
+
+<!-- Popups Framework -->
+<div class="popup" id="accessDeniedPopup"><div class="popup-content"><p>❌ Access Denied</p></div></div>
+<div class="popup" id="accessGrantedPopup"><div class="popup-content"><p>✅ Access Granted</p></div></div>
+<div class="popup" id="logoutPopup"><div class="popup-content"><p>🔒 Logout Successfully</p></div></div>
+
+<div class="popup" id="welcomePopup">
+  <div class="popup-content">
+    <button class="close-popup" onclick="logout()">Logout</button>
+    <h3>Welcome BAPON BARMON</h3>
+    <div style="margin-top:15px;display:flex;flex-direction:column;gap:10px;">
+      <button style="padding: 5px; background: #000; border: 1px solid #0f0; color: #0f0;">Control Alpha</button>
+      <button style="padding: 5px; background: #000; border: 1px solid #0f0; color: #0f0;">Control Beta</button>
+    </div>
+  </div>
+</div>
+
+<div class="popup" id="contactPopup">
+  <div class="popup-content">
+    <button class="close-popup" onclick="closePopup('contactPopup')">Close</button>
+    <p><strong>NAME:</strong> BAPON BARMON</p>
+    <p><strong>MOBILE:</strong> 8638909301</p>
+    <p><strong>EMAIL:</strong> BAPONBARMON@OUTLOOK.COM</p>
+  </div>
+</div>
+
+<div class="popup" id="aboutPopup">
+  <div class="popup-content">
+    <button class="close-popup" onclick="closePopup('aboutPopup')">Close</button>
+    <p>BAPON BARMON UI is a modern cyber portal framework providing rapid secure tools.</p>
+  </div>
+</div>
+
+<div class="popup" id="privacyPopup">
+  <div class="popup-content"><button class="close-popup" onclick="closePopup('privacyPopup')">Close</button><p>Data localization and environment privacy active.</p></div>
+</div>
+<div class="popup" id="termsPopup">
+  <div class="popup-content"><button class="close-popup" onclick="closePopup('termsPopup')">Close</button><p>Terms of service: Use infrastructure responsibly.</p></div>
+</div>
+<div class="popup" id="sitemapPopup">
+  <div class="popup-content"><button class="close-popup" onclick="closePopup('sitemapPopup')">Close</button><p>Core / Tools Menu / Tools 2.0 / B-Drive / Profile</p></div>
+</div>
+
+<!-- --- Futuristic Footer --- -->
+<div class="page-footer">
+  <div class="footer-top">
+    <!-- Cyber Neon Social Icons with Github Fix -->
+    <div class="footer-social">
+      <a href="https://www.facebook.com/bapanbarman126" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://github.com/baponbarmon" title="GitHub"><i class="fab fa-github"></i></a>
+      <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" title="Youtube"><i class="fab fa-youtube"></i></a>
+    </div>
+
+    <!-- Stylish Cyber Links Grid -->
+    <div class="footer-links">
+      <a href="javascript:void(0)" onclick="openPopup('aboutPopup')">ABOUT US</a>
+      <a href="javascript:void(0)" onclick="openPopup('privacyPopup')">PRIVACY POLICY</a>
+      <a href="javascript:void(0)" onclick="openPopup('termsPopup')">TERMS & SERVICES</a>
+      <a href="javascript:void(0)" onclick="openPopup('sitemapPopup')">SITE MAP</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 BAPON BARMON. TERMINAL INFRASTRUCTURE LAYER ALL RIGHTS RESERVED.</div>
+</div>
+
+</body>
+</html>
