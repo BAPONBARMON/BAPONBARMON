@@ -214,27 +214,82 @@ body::before {
 }
 @keyframes slowHeartbeat { to { stroke-dashoffset: 0; } }
 
-/* --- Cyber Hacking Spinner Screen --- */
-.hacker-loading-screen {
-  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;
+/* --- FAST 1s HACKER TERMINAL LOADER OVERLAY --- */
+#loader-overlay-4 {
+  position: fixed;
+  inset: 0;
+  background: #050508;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  gap: 15px;
 }
-.cyber-spinner {
-  width: 70px; height: 70px; border: 3px solid transparent; border-top: 3px solid #00ff00; border-bottom: 3px solid #00ff00;
-  border-radius: 50%; animation: cyberSpin 1s linear infinite; box-shadow: 0 0 15px #00ff00; position: relative;
+
+/* Clear & Sharp Terminal Box */
+.terminal-box {
+  width: 300px;
+  background: #0d0e12;
+  border: 2px solid #00ff7f;
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: 0 0 15px rgba(0, 255, 127, 0.3);
 }
-.cyber-spinner::after {
-  content: ""; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
-  border: 2px solid transparent; border-left: 2px solid #00ff00; border-right: 2px solid #00ff00;
-  border-radius: 50%; animation: cyberSpinReverse 1.5s linear infinite;
+
+.terminal-header {
+  font-size: 12px;
+  font-weight: bold;
+  color: #00ff7f;
+  border-bottom: 1px solid #00ff7f55;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  letter-spacing: 0.5px;
 }
-.loading-text {
-  margin-top: 20px; color: #00ff00; font-family: monospace; font-size: 13px;
-  letter-spacing: 4px; font-weight: bold; animation: pulseText 0.8s infinite alternate;
+
+.pct-text {
+  color: #ffffff;
+  font-weight: 900;
+  background: #00ff7f33;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #00ff7f;
 }
-@keyframes cyberSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-@keyframes cyberSpinReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
-@keyframes pulseText { 0% { opacity: 0.4; } 100% { opacity: 1; } }
+
+.terminal-logs {
+  font-size: 12px;
+  font-weight: 700;
+  height: 48px;
+  color: #00ff7f;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sharp Cyber Progress Bar */
+.progress-track {
+  width: 100%;
+  height: 10px;
+  background: #14151c;
+  border: 1.5px solid #00ff7f;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 14px;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: #00ff7f;
+  box-shadow: 0 0 8px #00ff7f;
+  transition: width 0.05s linear;
+}
 
 /* Popups Framework */
 .popup {
@@ -343,16 +398,59 @@ function switchTab(evt, tabId) {
   if(evt) evt.currentTarget.classList.add("active");
 }
 
-// 2-Second Cyber Loading Function with SAME PAGE REDIRECTION
+// 1-Second Cyber Terminal Loading Function with SAME PAGE REDIRECTION
 function launchTool(url, e) {
   if(e) e.preventDefault();
-  var loader = document.getElementById("hackerLoader");
-  loader.style.display = "flex";
   
-  setTimeout(function() {
-    loader.style.display = "none";
-    window.open(url, '_self'); 
-  }, 2000);
+  const loader = document.getElementById("loader-overlay-4");
+  const pBar = document.getElementById('pBar');
+  const pctText = document.getElementById('pctText');
+  const logBox = document.getElementById('logBox');
+
+  // Reset loader UI
+  pBar.style.width = '0%';
+  pctText.innerText = '0%';
+  logBox.innerHTML = '<div>> Init core modules...</div>';
+  loader.style.opacity = '1';
+  loader.style.display = 'flex';
+
+  const logs = [
+    "> Connecting network...",
+    "> Verifying credentials...",
+    "> Loading scripts...",
+    "> Decrypting UI...",
+    "> System ready."
+  ];
+
+  let currentProg = 0;
+  let logIndex = 0;
+
+  const runner = setInterval(() => {
+    currentProg += 5; // Fast progression
+    if (currentProg > 100) currentProg = 100;
+
+    pBar.style.width = currentProg + '%';
+    pctText.innerText = currentProg + '%';
+
+    if (currentProg > (logIndex + 1) * 20 && logIndex < logs.length) {
+      const newLog = document.createElement('div');
+      newLog.innerText = logs[logIndex];
+      logBox.appendChild(newLog);
+      logIndex++;
+    }
+
+    if (currentProg >= 100) {
+      clearInterval(runner);
+      setTimeout(() => {
+        loader.style.opacity = '0';
+        loader.style.transition = 'opacity 0.2s ease';
+        setTimeout(() => {
+          loader.style.display = 'none';
+          window.open(url, '_self'); 
+        }, 200);
+      }, 100);
+    }
+  }, 45); // Completes in ~1 sec
 }
 
 // Live Realtime OS Engine for System Core Widget
@@ -400,10 +498,20 @@ function logout(){
 </head>
 <body onload="runCyberClock()">
 
-<!-- High Stylish Dual-Ring Hacker Loading Layer -->
-<div class="hacker-loading-screen" id="hackerLoader">
-    <div class="cyber-spinner"></div>
-    <div class="loading-text">Loading Data, Please Wait.....</div>
+<!-- FAST 1s HACKER TERMINAL LOADER OVERLAY -->
+<div id="loader-overlay-4">
+  <div class="terminal-box">
+    <div class="terminal-header">
+      <span>STATUS: BOOTING</span>
+      <span class="pct-text" id="pctText">0%</span>
+    </div>
+    <div class="terminal-logs" id="logBox">
+      <div>> Init core modules...</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="pBar"></div>
+    </div>
+  </div>
 </div>
 
 <!-- Dynamic Navigation Headings - MATCHED BOX DESIGN & EXTRA BOLD -->
