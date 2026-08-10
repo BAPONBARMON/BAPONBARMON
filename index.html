@@ -25,7 +25,7 @@ body::before {
   background: #030a03;
   display: flex; flex-direction: column; justify-content: center; align-items: center;
   z-index: 99999; font-family: 'Courier New', monospace;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 .pin-circle-spinner {
   position: relative; width: 48px; height: 48px;
@@ -392,13 +392,29 @@ body::before {
 </style>
 
 <script>
-// Hide Android PIN Circle loader smoothly once full page has loaded
+// Hide Android PIN Circle loader smoothly when initial load is completed
 window.addEventListener('load', function() {
-  const loader = document.getElementById('loader-pin-circle');
-  setTimeout(() => {
-    loader.classList.add('loader-hidden');
-  }, 400); // Smooth fade transition
+  hideLoader();
 });
+
+// ✅ CRITICAL FIX: Hide loader when navigating back via browser history (Back Button)
+window.addEventListener('pageshow', function(event) {
+  hideLoader();
+});
+
+function hideLoader() {
+  const loader = document.getElementById('loader-pin-circle');
+  if (loader) {
+    loader.classList.add('loader-hidden');
+  }
+}
+
+function showLoader() {
+  const loader = document.getElementById('loader-pin-circle');
+  if (loader) {
+    loader.classList.remove('loader-hidden');
+  }
+}
 
 function switchTab(evt, tabId) {
   var container = document.getElementById("mainContainer");
@@ -426,12 +442,11 @@ function launchTool(url, e) {
   if(e) e.preventDefault();
   closePopup('searchPopup');
   
-  const loader = document.getElementById("loader-pin-circle");
-  loader.classList.remove('loader-hidden');
+  showLoader();
 
   setTimeout(() => {
     window.open(url, '_self');
-  }, 1000); // Shows spinner for 1 sec before smooth navigation
+  }, 300); // Trigger navigation smoothly
 }
 
 function runCyberClock() {
